@@ -82,6 +82,8 @@ set_seed(random_seed)
 with open('./LG_natural_language_processing_day21/data/naver_shopping.txt','r',encoding='utf-8') as f:
   data = f.readlines()
 
+data[0]
+
 # 분석에 사용할 형태로 가공하기
 rate = []
 label = []
@@ -94,7 +96,7 @@ for cur_review in tqdm(data):
   # 리뷰 문장
   sentence.append(cur_review[1].strip('\n'))
   # 평점 4,5 : Positive, 
-  # 평점 1,2 : Negative
+  # 평점 1,2,3 : Negative
   if int(cur_review[0]) >3:
     label.append(1) # positive
   else:
@@ -109,9 +111,15 @@ df = {
 df = pd.DataFrame(df)
 df = df.sample(frac=0.5,replace=False, random_state=42)
 
+df.shape
+
+df.head()
+
 df['label'].hist()
 
 df.head()
+
+df['sentence'].head()
 
 """### STEP 2. 데이터 전처리 (Preprocessing)"""
 
@@ -132,13 +140,17 @@ df['normalize_sentence'] = normalize_sentence
 
 df
 
+! pip install konlpy -q
+
 """### STEP 3. 토큰화 진행 (Tokenization)"""
+
+! pip install konlpy -q
 
 # Okt(Open Korea Text)
 from konlpy.tag import Okt  
 okt=Okt() 
 
-okt.morphs(normalize_sentence[0])
+print(okt.morphs(normalize_sentence[0]))
 
 tokenized_sentence = []
 for sent in tqdm(normalize_sentence):
