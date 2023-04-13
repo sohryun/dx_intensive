@@ -174,24 +174,31 @@ test_df['label'].hist()
 
 from gensim.models import Word2Vec
 
+train_df.head()
+
 train_sentence = train_df['tokenized_sentence'].to_list()
 test_sentence = test_df['tokenized_sentence'].to_list()
+
+train_sentence[0]
 
 # Commented out IPython magic to ensure Python compatibility.
 # %%time
 # model = Word2Vec(
 #     sentences=train_sentence,
-#     size=100, 
+#     vector_size=100, 
 #     window=5, 
-#     min_count=1, 
-#     workers=4,
+#     # sg=1 (기본값은 0, 가운데 이미지, 가운데 주변 이비지 등  )
+#     min_count=1, # 빈도수 설정. 이 빈도 이상인 경우만 학습에 포함 설정 가능
+#     workers=4,   # CPU의 프로세스 개수. 많을수록 학습이 빨라짐
 #     seed=random_seed)
 
 model.build_vocab([['<UNK>']],update=True)
 
-# model.save("word2vec.model")
+model.save("word2vec.model")
 
-vocab = list(model.wv.vocab)
+vocab = list(model.wv.index_to_key)
+
+model.wv.key_to_index
 
 len(vocab),type(vocab)
 
